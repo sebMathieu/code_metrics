@@ -1,0 +1,7 @@
+docopt
+radon
+coverage
+rst
+sphinx
+sphinx_rtd_theme
+sphinx-autoapi
