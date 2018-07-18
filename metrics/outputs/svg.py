@@ -5,7 +5,7 @@ import os
 from jinja2 import Template
 
 from .abstract_output import AbstractOutput
-from metrics.results import LINES_OF_CODE, DOCUMENTATION_RATE, TESTS_COVERAGE
+from metrics.results import LINES_OF_CODE, DOCUMENTATION_RATE, TESTS_COVERAGE, REPORT_DATE
 
 class SVG(AbstractOutput):
     """
@@ -34,6 +34,11 @@ class SVG(AbstractOutput):
     def output(self, results):
         # Prepare output folder
         os.makedirs(self.path, exist_ok=True)
+
+        # Output date
+        value = results[REPORT_DATE]
+        self.icon("%s/metric_date.svg" % self.path, key="Date", value=value.strftime('%m/%d'),
+                  color=self.neutral_color)
 
         # Output lines of code
         value = results[LINES_OF_CODE]

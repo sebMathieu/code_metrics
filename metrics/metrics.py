@@ -68,5 +68,7 @@ def tests_coverage(code_path, results, tests_path='tests'):
     # Parse the output report
     total_regex = re.compile(r'TOTAL.+?([0-9\.]+)%$')
     match = total_regex.search(report)
-
-    results[TESTS_COVERAGE] = float(match.group(1)) / 100.0
+    if match is None:
+        results[TESTS_COVERAGE] = 0.0
+    else:
+        results[TESTS_COVERAGE] = float(match.group(1)) / 100.0

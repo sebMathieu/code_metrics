@@ -9,6 +9,7 @@ where
     <path> is the path to the Python code.
 
 Options:
+    --console                   Console output.
     -h                          Display this help.
     --json PATH                 Output the report in a JSON file.
     --rst PATH                  Output the report in a RST file.
@@ -31,15 +32,17 @@ if __name__ == "__main__":
     results = compute_metrics(code_path, tests_path=args['-t'])
 
     # Select output format
-    out = Console()
-    for codec in [RST, JSON, SVG]:
+    output_done = False
+    for codec in [RST, JSON, SVG, Console]:
         arg_key = '--%s' % codec.__qualname__.lower()
         if args[arg_key] is not None:
-            out = codec(path=args[arg_key])
+            # Output
+            try:
+                codec(path=args[arg_key]).output(results)
+                output_done = True
+            except Exception as e:
+                print("Unable to use the output %s. Try using another output type." % out.__class__.__qualname__, file=sys.stderr)
 
-    # Output
-    try:
-        out.output(results)
-    except Exception as e:
-        print("Unable to use the output %s. Try using another output type." % out.__class__.__qualname__, file=sys.stderr)
-        raise e
+    # At least one output
+    if not output_done:
+        Console().output(results)

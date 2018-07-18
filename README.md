@@ -24,7 +24,6 @@ Documentation can be generated with ::
 
 The html doc is in ``doc/_build/html``
 
-
 A code coverage report can be obtained::
 
     coverage run --source metrics -m tests
