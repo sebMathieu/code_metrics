@@ -2,12 +2,13 @@
 
 import unittest
 import os
+import shutil
 import datetime
 import sys
 import io
 from unittest.mock import patch, mock_open, MagicMock
 
-from metrics.outputs import JSON, RST, Console
+from metrics.outputs import JSON, RST, Console, SVG
 
 class TestOutputs(unittest.TestCase):
     def setUp(self):
@@ -57,3 +58,16 @@ class TestOutputs(unittest.TestCase):
         sys.stdout.seek(0)
         report = sys.stdout.read()
         self.assertGreaterEqual(report.find("Documentation rate: 32%"), 0)
+
+    def test_svg(self):
+        output_path = os.path.dirname(__file__)
+        out = SVG(path=output_path)
+        out.output(self.results)
+
+        # Check
+        svg_names = [f for f  in os.listdir(output_path) if f.endswith(".svg")]
+        self.assertGreaterEqual(len(svg_names), 3)
+
+        # Clean
+        for f in svg_names:
+            os.remove('%s/%s' % (output_path, f))

@@ -5,3 +5,4 @@ rst
 sphinx
 sphinx_rtd_theme
 sphinx-autoapi
+jinja2

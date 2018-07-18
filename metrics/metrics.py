@@ -9,17 +9,18 @@ from radon.cli import Config
 
 from .results import initialize_results, LINES_OF_CODE, DOCUMENTATION_RATE, TESTS_COVERAGE
 
-def compute_metrics(code_path):
+def compute_metrics(code_path:str, tests_path:str="tests"):
     """
     Compute all available metrics.
 
-    :param code_path: Path to the source code
-    :param results: Dictionary to which the results are appended.
+    :param code_path: Path to the source code.
+    :param tests_path: Path with the unit tests.
+    :return Dictionary with the results.
     """
 
     results = initialize_results(code_path)
     raw_metrics(code_path, results)
-    tests_coverage(code_path, results)
+    tests_coverage(code_path, results, tests_path=tests_path)
 
     return results
 
@@ -31,8 +32,8 @@ def raw_metrics(code_path, results):
     :param results: Dictionary to which the results are appended.
     """
     config = Config(exclude=None, ignore=None, summary=True)
-    harverseter = RawHarvester([code_path], config)
-    metrics = harverseter.results
+    harvester = RawHarvester([code_path], config)
+    metrics = harvester.results
 
     # Get the summary which is the last metric of the metrics generator
     summary = dict()

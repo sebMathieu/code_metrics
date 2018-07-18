@@ -2,3 +2,5 @@
 htmlcov/
 output/
 doc/build/
+*.egg-info/
+dist/
