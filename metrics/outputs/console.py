@@ -16,4 +16,4 @@ class Console(AbstractOutput):
                 continue
 
             # Show
-            print("\t%s : %s" % (k, self.prettify(v)))
+            print("\t%s: %s" % (k, self.prettify(v)))

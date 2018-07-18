@@ -3,16 +3,11 @@
 import unittest
 import os
 import datetime
-from unittest.mock import patch, mock_open
+import sys
+import io
+from unittest.mock import patch, mock_open, MagicMock
 
 from metrics.outputs import JSON, RST, Console
-
-class MockMkdir(object):
-    def __init__(self):
-        self.received_args = None
-
-    def __call__(self, *args):
-        self.received_args = args
 
 class TestOutputs(unittest.TestCase):
     def setUp(self):
@@ -29,10 +24,14 @@ class TestOutputs(unittest.TestCase):
 
         # Mock
         self._orig_mkdir = os.mkdir
-        os.mkdir = MockMkdir()
+        os.mkdir = MagicMock()
+
+        self._orig_stdout = sys.stdout
+        sys.stdout = io.StringIO()
 
     def tearDown(self):
         os.mkdir = self._orig_mkdir
+        sys.stdout = self._orig_stdout
 
     def test_json(self):
         out = JSON("test.json")
@@ -53,4 +52,8 @@ class TestOutputs(unittest.TestCase):
     def test_console(self):
         out = Console()
         out.output(self.results)
-        # TODO mock print
+
+        # Fetch output
+        sys.stdout.seek(0)
+        report = sys.stdout.read()
+        self.assertGreaterEqual(report.find("Documentation rate: 32%"), 0)
