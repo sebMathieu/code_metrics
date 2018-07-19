@@ -54,7 +54,10 @@ def raw_metrics(code_path, results):
     # Weighted average summaries
     averaging_keys = {'mi': 'sloc'}
     for key_index, weight_index in averaging_keys.items():
-        summary[key_index] = sum([metrics[key_index] * metrics[weight_index] for metrics in file_metrics.values()]) / summary[weight_index]
+        if summary[weight_index] == 0.0:
+            summary[weight_index] = 0.0
+        else:
+            summary[key_index] = sum([metrics[key_index] * metrics[weight_index] for metrics in file_metrics.values()]) / summary[weight_index]
 
     # Export results
     results[LINES_OF_CODE] = summary.get('lloc', 0)

@@ -12,6 +12,7 @@ setup(
                       'radon',
                       'coverage',
                       'rst',
-                      'jinja2'],
+                      'jinja2',
+                      'deepmerge'],
     zip_safe=False
 )
