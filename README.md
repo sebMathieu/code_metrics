@@ -10,24 +10,21 @@ A basic example can be ran with
 
     python -m metrics <path_to_your_code>
 
+## Metrics
 
-Developement
-=============
+The metrics computed by this package are provided by unit tests and the
+[radon](http://radon.readthedocs.io/en/latest/intro.html) package.
+Deeper explanation of the metrics can be obtained by reading their
+corresponding documentation.
 
-For a manual installation, requirements can be installed with ::
+In a nutshell, here is a succinct description of the metrics:
 
-    pip install -r requirements.txt
-
-Documentation can be generated with ::
-
-    cd doc; make html; cd ..
-
-The html doc is in ``doc/_build/html``
-
-A code coverage report can be obtained::
-
-    coverage run --source metrics -m tests
-    coverage html
-
-You are warmly encouraged to run the metrics package on itself, of course !
+| Name | Type | Description |
+| --- | --- | --- |
+| Code path | string | Path of the evaluated code |
+| Report date | date | Metrics report production date |
+| Documentation rate | \[0,1\] | Documentation rate wrt. total number of lines |
+| Lines of code | positive integer | Number of logical lines of code |
+| Maintainability index |\[0,1\] | Maintainability index computed by Radon |
+| Tests coverage | \[0,1\] | Coverage rate of the unit tests |
 
