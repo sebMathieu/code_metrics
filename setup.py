@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='code_metrics',
-    version='0.0.3',
+    version='0.1.0',
     description='Compute Python code metrics reports.',
     url='https://github.com/sebMathieu/code_metrics',
     author='Sébastien Mathieu',

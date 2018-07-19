@@ -8,6 +8,7 @@ REPORT_DATE = 'Report date'
 LINES_OF_CODE = 'Lines of code'
 COMMENT_RATE = 'Documentation rate'
 TESTS_COVERAGE = 'Tests coverage'
+MAINTAINABILITY_INDEX = 'Maintainability index'
 
 
 def initialize_results(code_path=".", date=datetime.datetime.now()):

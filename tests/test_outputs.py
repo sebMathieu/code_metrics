@@ -9,6 +9,7 @@ import io
 from unittest.mock import patch, mock_open, MagicMock
 
 from metrics.outputs import JSON, RST, Console, SVG
+from metrics.results import CODE_PATH, REPORT_DATE, LINES_OF_CODE, COMMENT_RATE, TESTS_COVERAGE, MAINTAINABILITY_INDEX
 
 class TestOutputs(unittest.TestCase):
     def setUp(self):
@@ -16,11 +17,12 @@ class TestOutputs(unittest.TestCase):
 
         # Data
         self.results = {
-            "Code path": "metrics",
-            "Report date": datetime.datetime(2018, 6, 24, 1, 2, 3),
-            "Lines of code": 127,
-            "Documentation rate": 0.32,
-            "Tests coverage": 0.6
+            CODE_PATH: "metrics",
+            REPORT_DATE: datetime.datetime(2018, 6, 24, 1, 2, 3),
+            LINES_OF_CODE: 127,
+            COMMENT_RATE: 0.32,
+            TESTS_COVERAGE: 0.6,
+            MAINTAINABILITY_INDEX: 0.82
         }
 
         # Mock

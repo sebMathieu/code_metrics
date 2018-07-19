@@ -4,10 +4,12 @@ import subprocess
 import re
 from io import StringIO
 
-from radon.cli.harvest import RawHarvester
+from deepmerge import always_merger
+from radon.cli.harvest import RawHarvester, MIHarvester, CCHarvester
+from radon.complexity import LINES
 from radon.cli import Config
 
-from .results import initialize_results, LINES_OF_CODE, COMMENT_RATE, TESTS_COVERAGE
+from .results import initialize_results, LINES_OF_CODE, COMMENT_RATE, TESTS_COVERAGE, MAINTAINABILITY_INDEX
 
 def compute_metrics(code_path:str, tests_path:str="tests"):
     """
@@ -22,31 +24,42 @@ def compute_metrics(code_path:str, tests_path:str="tests"):
     raw_metrics(code_path, results)
     tests_coverage(code_path, results, tests_path=tests_path)
 
-    return results
+    return {k: results[k] for k in sorted(results.keys())}
 
 def raw_metrics(code_path, results):
     """
-    Compute raw metrics such as number of lines of code or documentation rate.
+    Compute raw metrics such as number of lines of code, documentation rate or complexity metrics
 
     :param code_path: Path to the source code
     :param results: Dictionary to which the results are appended.
     """
-    config = Config(exclude=None, ignore=None, summary=True)
-    harvester = RawHarvester([code_path], config)
-    metrics = harvester.results
 
-    # Get the summary which is the last metric of the metrics generator
+    # Lines
+    h = RawHarvester([code_path], Config(exclude=None, ignore=None, summary=True))
+    file_metrics = dict(h.results)
+
+    # Maintainability
+    h = MIHarvester([code_path],
+                Config(min='A', max='C', multi=True, exclude=None, ignore=None, show=False, json=False,
+                       sort=False))
+    mi_metrics = dict(h.results)
+    always_merger.merge(file_metrics, mi_metrics)
+
+    # Create a summary for the total of the code
     summary = dict()
-    for m in metrics:
-        for k, v in m[1].items():
-            try:
-                summary[k] += v
-            except KeyError:
-                summary[k] = v
+    summation_keys = ['loc', 'lloc', 'sloc', 'comments', 'multi', 'blank', 'single_comments']
+    for k in summation_keys:
+        summary[k] = sum([metrics[k] for metrics in file_metrics.values()])
+
+    # Weighted average summaries
+    averaging_keys = {'mi': 'sloc'}
+    for key_index, weight_index in averaging_keys.items():
+        summary[key_index] = sum([metrics[key_index] * metrics[weight_index] for metrics in file_metrics.values()]) / summary[weight_index]
 
     # Export results
-    results[LINES_OF_CODE] = summary.get('sloc', 0)
+    results[LINES_OF_CODE] = summary.get('lloc', 0)
     results[COMMENT_RATE] = (float(summary.get('comments', 0)) + float(summary.get('multi', 0))) / (float(summary.get('loc', 1)))
+    results[MAINTAINABILITY_INDEX] = summary.get('mi', 0.0) / 100.0
 
 def tests_coverage(code_path, results, tests_path='tests'):
     # Run the coverage

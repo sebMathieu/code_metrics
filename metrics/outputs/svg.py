@@ -5,7 +5,7 @@ import os
 from jinja2 import Template
 
 from .abstract_output import AbstractOutput
-from metrics.results import LINES_OF_CODE, COMMENT_RATE, TESTS_COVERAGE, REPORT_DATE
+from metrics.results import LINES_OF_CODE, COMMENT_RATE, TESTS_COVERAGE, REPORT_DATE, MAINTAINABILITY_INDEX
 
 class SVG(AbstractOutput):
     """
@@ -48,12 +48,17 @@ class SVG(AbstractOutput):
         # Output documentation rate
         value = results[COMMENT_RATE]
         self.icon('%s/metric_comments.svg' % self.path, key="/* */", value=self.prettify(value),
-                  color=self.color_from_float(value, max_value=0.4, min_value=0.05))
+                  color=self.color_from_float(value, max_value=0.45))
 
         # Output test coverage
         value = results[TESTS_COVERAGE]
         self.icon('%s/metric_tests.svg' % self.path, key="Tests", value=self.prettify(value),
                   color=self.color_from_float(value, min_value=0.2))
+
+        # Output maintainability index
+        value = results[MAINTAINABILITY_INDEX]
+        self.icon('%s/metric_maintainability_index.svg' % self.path, key="MI", value=self.prettify(value),
+                  color=self.color_from_float(value, min_value=0.2, max_value=0.9))
 
     def color_from_float(self, value:float, min_value=0.0, max_value=1.0):
         """
@@ -72,12 +77,14 @@ class SVG(AbstractOutput):
         elif value >= max_value:
             return self.success_color
         else:
+            r = value / (max_value - min_value) # Success rate in [0,1]
+
             def hex_to_rgb(hex):
                 return tuple(int(hex[i:i + 2], 16) for i in (0, 2, 4))
 
             min_color = hex_to_rgb(self.failure_color[1:])
             max_color = hex_to_rgb(self.success_color[1:])
-            rgb_color = tuple(map(lambda x, y: round((x + y) / 2), min_color, max_color))
+            rgb_color = tuple(map(lambda x, y: round((1.0 - r) * x + r * y), min_color, max_color))
             return '#%02x%02x%02x' % rgb_color
 
     @staticmethod
