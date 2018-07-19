@@ -5,7 +5,7 @@ import os
 from jinja2 import Template
 
 from .abstract_output import AbstractOutput
-from metrics.results import LINES_OF_CODE, DOCUMENTATION_RATE, TESTS_COVERAGE, REPORT_DATE
+from metrics.results import LINES_OF_CODE, COMMENT_RATE, TESTS_COVERAGE, REPORT_DATE
 
 class SVG(AbstractOutput):
     """
@@ -46,30 +46,30 @@ class SVG(AbstractOutput):
                   color=self.neutral_color if value > 0 else self.failure_color)
 
         # Output documentation rate
-        value = results[DOCUMENTATION_RATE]
-        self.icon('%s/metric_doc.svg' % self.path, key="Doc", value=self.prettify(value),
-                  color=self.color_from_float(value, max=0.4, min=0.05))
+        value = results[COMMENT_RATE]
+        self.icon('%s/metric_comments.svg' % self.path, key="/* */", value=self.prettify(value),
+                  color=self.color_from_float(value, max_value=0.4, min_value=0.05))
 
         # Output test coverage
         value = results[TESTS_COVERAGE]
         self.icon('%s/metric_tests.svg' % self.path, key="Tests", value=self.prettify(value),
-                  color=self.color_from_float(value, min=0.2))
+                  color=self.color_from_float(value, min_value=0.2))
 
-    def color_from_float(self, value:float, min=0.0, max=1.0):
+    def color_from_float(self, value:float, min_value=0.0, max_value=1.0):
         """
         Convert a float into a color.
 
         :param value: Float.
-        :param min: Minimum value considered as failing.
-        :param max: Maximum value considered as success.
+        :param min_value: Minimum value considered as failing.
+        :param max_value: Maximum value considered as success.
         :return: Hexadecimal color.
         """
 
         if value is None:
             return self.failure_color
-        elif value <= min:
+        elif value <= min_value:
             return self.failure_color
-        elif value >= max:
+        elif value >= max_value:
             return self.success_color
         else:
             def hex_to_rgb(hex):

@@ -6,7 +6,7 @@ import datetime
 CODE_PATH = 'Code path'
 REPORT_DATE = 'Report date'
 LINES_OF_CODE = 'Lines of code'
-DOCUMENTATION_RATE = 'Documentation rate'
+COMMENT_RATE = 'Documentation rate'
 TESTS_COVERAGE = 'Tests coverage'
 
 

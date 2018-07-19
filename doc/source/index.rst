@@ -7,7 +7,7 @@ Obtain a code metrics report from your code by running::
 
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 5
    :caption: Contents:
 
 Indices and tables

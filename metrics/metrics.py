@@ -7,7 +7,7 @@ from io import StringIO
 from radon.cli.harvest import RawHarvester
 from radon.cli import Config
 
-from .results import initialize_results, LINES_OF_CODE, DOCUMENTATION_RATE, TESTS_COVERAGE
+from .results import initialize_results, LINES_OF_CODE, COMMENT_RATE, TESTS_COVERAGE
 
 def compute_metrics(code_path:str, tests_path:str="tests"):
     """
@@ -46,7 +46,7 @@ def raw_metrics(code_path, results):
 
     # Export results
     results[LINES_OF_CODE] = summary.get('sloc', 0)
-    results[DOCUMENTATION_RATE] = (float(summary.get('comments', 0)) + float(summary.get('multi', 0))) / (float(summary.get('loc', 1)))
+    results[COMMENT_RATE] = (float(summary.get('comments', 0)) + float(summary.get('multi', 0))) / (float(summary.get('loc', 1)))
 
 def tests_coverage(code_path, results, tests_path='tests'):
     # Run the coverage
