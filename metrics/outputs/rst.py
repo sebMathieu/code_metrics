@@ -1,6 +1,7 @@
 # -*- coding: UTF-8 -*-
 
 import rst
+import os
 
 from .abstract_output import AbstractOutput
 from metrics.results import CODE_PATH, REPORT_DATE
@@ -23,5 +24,6 @@ class RST(AbstractOutput):
         doc.add_child(table)
 
         # Write it
+        os.makedirs(os.path.dirname(self.path), exist_ok=True)
         with open('%s' % self.path, 'w') as file:
             file.write(doc.get_rst())

@@ -16,7 +16,7 @@ class SVG(AbstractOutput):
     :ivar neutral_color: Neutral hexadecimal color .
     """
 
-    def __init__(self, *args, success_color="#44cc11", failure_color="#e05d44", neutral_color="#007ec6", **kwargs):
+    def __init__(self, *args, success_color="#4BB543", failure_color="#e05d44", neutral_color="#007ec6", **kwargs):
         """
 
         :param args: AbstractOutput arguments.

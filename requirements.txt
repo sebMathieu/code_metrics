@@ -3,8 +3,9 @@ radon
 coverage
 rst
 sphinx
-sphinx_rtd_theme
+sphinx_bootstrap_theme
 sphinx-autoapi
 jinja2
 recommonmark
 deepmerge
+cairosvg

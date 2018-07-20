@@ -15,5 +15,6 @@ A code coverage report can be obtained::
     coverage run --source metrics -m tests
     coverage html
 
-You are warmly encouraged to run the metrics package on itself, of course !
+To obtain, the icon run this package on itself with::
 
+    python -m metrics --png doc/metrics

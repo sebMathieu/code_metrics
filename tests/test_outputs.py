@@ -2,14 +2,14 @@
 
 import unittest
 import os
-import shutil
 import datetime
 import sys
 import io
 from unittest.mock import patch, mock_open, MagicMock
 
-from metrics.outputs import JSON, RST, Console, SVG
+from metrics.outputs import JSON, RST, Console, SVG, PNG
 from metrics.results import CODE_PATH, REPORT_DATE, LINES_OF_CODE, COMMENT_RATE, TESTS_COVERAGE, MAINTAINABILITY_INDEX
+
 
 class TestOutputs(unittest.TestCase):
     def setUp(self):
@@ -72,4 +72,17 @@ class TestOutputs(unittest.TestCase):
 
         # Clean
         for f in svg_names:
+            os.remove('%s/%s' % (output_path, f))
+
+    def test_png(self):
+        output_path = os.path.dirname(__file__)
+        out = PNG(path=output_path)
+        out.output(self.results)
+
+        # Check
+        png_names = [f for f  in os.listdir(output_path) if f.endswith(".png")]
+        self.assertGreaterEqual(len(png_names), 3)
+
+        # Clean
+        for f in png_names:
             os.remove('%s/%s' % (output_path, f))

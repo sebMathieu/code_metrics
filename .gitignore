@@ -4,3 +4,4 @@ output/
 doc/build/
 *.egg-info/
 dist/
+.coverage

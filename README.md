@@ -1,4 +1,8 @@
-# Code metrics
+<img src="doc/metrics/metric_tests.png" height=20> &nbsp;
+<img src="doc/metrics/metric_maintainability_index.png" height=20> &nbsp;
+<img src="doc/metrics/metric_comments.png" height=20> &nbsp;
+<img src="doc/metrics/metric_lines.png" height=20> &nbsp;
+<img src="doc/metrics/metric_date.png" height=20> &nbsp;
 
 ## Quickstart
 
@@ -6,9 +10,14 @@ To use the code metrics as a package use the setup script with
 
     python setup.py install
 
-A basic example can be ran with
+Go to the root folder of your source code and run
 
-    python -m metrics <path_to_your_code>
+    python -m metrics
+
+Ideally, there should be a `tests` folder containing your unit tests.
+Additional help is available with
+
+    python -m metrics -h
 
 ## Metrics
 
