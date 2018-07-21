@@ -5,9 +5,9 @@ To use the code metrics as a package use the setup script with::
 
     python setup.py install
 
-Go to the root folder of your source code and run::
+Go to the parent folder of your source code and run::
 
-    python -m metrics
+    python -m metrics sources_path
 
 Ideally, there should be a `tests` folder containing your unit tests.
 Additional help is available with::

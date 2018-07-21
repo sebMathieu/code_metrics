@@ -3,13 +3,12 @@
 Compute Python code metrics.
 
 Usage:
-    metrics [options]
+    metrics [options] <code_path>
 
 Options:
     --console                   Console output.
     -h                          Display this help.
     --json PATH                 Output the report in a JSON file.
-    -p PATH                     Path to the source code [Default: .]
     --png PATH                  Output PNG files in the given path
     --rst PATH                  Output the report in a RST file.
     --svg PATH                  Output SVG files in the given path.
@@ -27,7 +26,7 @@ if __name__ == "__main__":
     args = docopt(__doc__)
 
     # Compute metrics
-    code_path = args['-p']
+    code_path = args['<code_path>']
     results = compute_metrics(code_path, tests_path=args['-t'])
 
     # Select output format from arguments and output

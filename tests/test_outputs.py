@@ -8,8 +8,7 @@ import io
 from unittest.mock import patch, mock_open, MagicMock
 
 from metrics.outputs import JSON, RST, Console, SVG, PNG
-from metrics.results import CODE_PATH, REPORT_DATE, LINES_OF_CODE, COMMENT_RATE, TESTS_COVERAGE, MAINTAINABILITY_INDEX
-
+import metrics.results as metrics_results
 
 class TestOutputs(unittest.TestCase):
     def setUp(self):
@@ -17,12 +16,15 @@ class TestOutputs(unittest.TestCase):
 
         # Data
         self.results = {
-            CODE_PATH: "metrics",
-            REPORT_DATE: datetime.datetime(2018, 6, 24, 1, 2, 3),
-            LINES_OF_CODE: 127,
-            COMMENT_RATE: 0.32,
-            TESTS_COVERAGE: 0.6,
-            MAINTAINABILITY_INDEX: 0.82
+            metrics_results.CODE_PATH: "metrics",
+            metrics_results.REPORT_DATE: datetime.datetime(2018, 6, 24, 1, 2, 3),
+            metrics_results.LINES_OF_CODE: 127,
+            metrics_results.COMMENT_RATE: 0.32,
+            metrics_results.TESTS_COVERAGE: None,
+            metrics_results.MAINTAINABILITY_INDEX: 0.82,
+            metrics_results.AVERAGE_CYCLOMATIC_COMPLEXITY: 3.5,
+            metrics_results.MAX_CYCLOMATIC_COMPLEXITY: 9,
+            metrics_results.MAX_CYCLOMATIC_COMPLEXITY_FUNCTION: "..."
         }
 
         # Mock
@@ -43,7 +45,7 @@ class TestOutputs(unittest.TestCase):
             out.output(self.results)
         m.assert_called_once_with('test.json', 'w')
         handle = m()
-        handle.write.assert_any_call('"Tests coverage"')
+        handle.write.assert_any_call('"%s"' % metrics_results.TESTS_COVERAGE)
 
     def test_rst(self):
         out = RST("test.rst")
@@ -59,7 +61,8 @@ class TestOutputs(unittest.TestCase):
         # Fetch output
         sys.stdout.seek(0)
         report = sys.stdout.read()
-        self.assertGreaterEqual(report.find("Documentation rate: 32%"), 0)
+        self.assertGreaterEqual(report.find("%s: 32%%" % metrics_results.COMMENT_RATE), 0)
+        self.assertGreaterEqual(report.find("%s: Failed" % metrics_results.TESTS_COVERAGE), 0)
 
     def test_svg(self):
         output_path = os.path.dirname(__file__)

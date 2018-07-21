@@ -2,14 +2,19 @@
 
 import subprocess
 import re
+import os
+import sys
 from io import StringIO
 
 from deepmerge import always_merger
 from radon.cli.harvest import RawHarvester, MIHarvester, CCHarvester
-from radon.complexity import LINES
+from radon.complexity import SCORE
 from radon.cli import Config
 
-from .results import initialize_results, LINES_OF_CODE, COMMENT_RATE, TESTS_COVERAGE, MAINTAINABILITY_INDEX
+from .results import initialize_results, LINES_OF_CODE, COMMENT_RATE, TESTS_COVERAGE, MAINTAINABILITY_INDEX, \
+    MAX_CYCLOMATIC_COMPLEXITY, MAX_CYCLOMATIC_COMPLEXITY_FUNCTION, AVERAGE_CYCLOMATIC_COMPLEXITY
+
+COVERAGE_FILE = '.coverage'  # Path to the coverage file
 
 def compute_metrics(code_path:str, tests_path:str="tests"):
     """
@@ -22,6 +27,7 @@ def compute_metrics(code_path:str, tests_path:str="tests"):
 
     results = initialize_results(code_path)
     raw_metrics(code_path, results)
+    cyclomatic_complexity(code_path, results)
     tests_coverage(code_path, results, tests_path=tests_path)
 
     return {k: results[k] for k in sorted(results.keys())}
@@ -64,14 +70,63 @@ def raw_metrics(code_path, results):
     results[COMMENT_RATE] = (float(summary.get('comments', 0)) + float(summary.get('multi', 0))) / (float(summary.get('loc', 1)))
     results[MAINTAINABILITY_INDEX] = summary.get('mi', 0.0) / 100.0
 
+
+def cyclomatic_complexity(code_path, results):
+    """
+    Compute all available metrics.
+
+    :param code_path: Path to the source code.
+    :param results: Dictionary with the results.
+    """
+    h = CCHarvester([code_path],
+                    Config(min='A', max='F', exclude=None, ignore=None, show_complexity=False, average=False,
+                           total_average=False, order=SCORE, no_assert=False, show_closures=False))
+
+    max_complexity = 0
+    max_complexity_function = "" # Maximum complexity function pointer
+    avg_complexity = 0 # Weighted average complexity by the number of functions
+    avg_weight = 0 # Total weight used to compute the average complexity
+    for file_path, metrics in h.results:
+        for m in metrics:
+            # Average
+            avg_complexity += m.complexity
+            avg_weight += 1
+
+            # Maximum
+            if max_complexity < m.complexity:
+                max_complexity = m.complexity
+                max_complexity_function = "%s in %s:%s with complexity %s" % (m.fullname, file_path, m.lineno, m.complexity)
+
+    # Finish the weighted average
+    if avg_weight > 0.0:
+        avg_complexity /= avg_weight
+
+    # Populate results
+    results[AVERAGE_CYCLOMATIC_COMPLEXITY] = avg_complexity
+    results[MAX_CYCLOMATIC_COMPLEXITY] = max_complexity
+    results[MAX_CYCLOMATIC_COMPLEXITY_FUNCTION] = max_complexity_function
+
 def tests_coverage(code_path, results, tests_path='tests'):
+    """
+    Get the test coverage rate from unit tests.
+
+    :param code_path: Path to the source code.
+    :param results: Dictionary with the results.
+    :param tests_path: Path with the unit tests.
+    """
+
     # Run the coverage
+
+    if os.path.exists(COVERAGE_FILE):
+        os.remove(COVERAGE_FILE)
     cmd = ['coverage', 'run', '--source', code_path, '-m', tests_path]
     result = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
-    if result.returncode != 0:
-        print("Unit tests failed.")
+    failed = result.stderr.decode().find('FAILED') >= 0
+    if failed:
+        print("Unit tests failed.", file=sys.stderr)
         results[TESTS_COVERAGE] = None
+        return
 
     # Get the coverage report
     report_output = StringIO()

@@ -5,3 +5,6 @@ doc/build/
 *.egg-info/
 dist/
 .coverage
+venv/
+doc/metrics/*.svg
+doc/metrics/*.rst

@@ -3,8 +3,8 @@
 import unittest
 import os
 
-from metrics.metrics import raw_metrics
-from metrics.results import initialize_results, LINES_OF_CODE, COMMENT_RATE, REPORT_DATE, MAINTAINABILITY_INDEX
+from metrics.metrics import raw_metrics, cyclomatic_complexity
+import metrics.results as metric_results
 
 TEST_CODE_PATH = "metrics"
 
@@ -13,12 +13,21 @@ class TestMetrics(unittest.TestCase):
         os.chdir(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))  # Set the working directory to the root.
 
     def test_raw(self):
-        results = initialize_results(TEST_CODE_PATH)
-        raw_metrics(TEST_CODE_PATH, results)
+        r = metric_results.initialize_results(TEST_CODE_PATH) # Results dictionary
+        raw_metrics(TEST_CODE_PATH, r)
 
-        self.assertIn(LINES_OF_CODE, results)
-        self.assertIn(COMMENT_RATE, results)
-        self.assertIn(REPORT_DATE, results)
+        self.assertIn(metric_results.LINES_OF_CODE, r)
+        self.assertIn(metric_results.COMMENT_RATE, r)
+        self.assertIn(metric_results.REPORT_DATE, r)
 
-        self.assertGreater(results[MAINTAINABILITY_INDEX], 0.0)
-        self.assertLessEqual(results[MAINTAINABILITY_INDEX], 1.0)  # Equal because, perfection is reachable, sometimes  ...
+        self.assertGreater(r[metric_results.MAINTAINABILITY_INDEX], 0.0)
+        self.assertLessEqual(r[metric_results.MAINTAINABILITY_INDEX], 1.0)  # Equal because, perfection is reachable, sometimes  ...
+
+    def test_cc(self):
+        r = {}
+        cyclomatic_complexity(TEST_CODE_PATH, r)
+
+        self.assertLess(r[metric_results.MAX_CYCLOMATIC_COMPLEXITY], 30)
+        self.assertLess(r[metric_results.AVERAGE_CYCLOMATIC_COMPLEXITY], 20)
+        self.assertIsNotNone(r[metric_results.MAX_CYCLOMATIC_COMPLEXITY_FUNCTION])
+        

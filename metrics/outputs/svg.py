@@ -5,7 +5,7 @@ import os
 from jinja2 import Template
 
 from .abstract_output import AbstractOutput
-from metrics.results import LINES_OF_CODE, COMMENT_RATE, TESTS_COVERAGE, REPORT_DATE, MAINTAINABILITY_INDEX
+from metrics.results import LINES_OF_CODE, COMMENT_RATE, TESTS_COVERAGE, REPORT_DATE, MAINTAINABILITY_INDEX, MAX_CYCLOMATIC_COMPLEXITY
 
 class SVG(AbstractOutput):
     """
@@ -60,31 +60,42 @@ class SVG(AbstractOutput):
         self.icon('%s/metric_maintainability_index.svg' % self.path, key="MI", value=self.prettify(value),
                   color=self.color_from_float(value, min_value=0.2, max_value=0.9))
 
-    def color_from_float(self, value:float, min_value=0.0, max_value=1.0):
+        # Output cyclomatic complexity
+        value = results[MAX_CYCLOMATIC_COMPLEXITY]
+        self.icon('%s/metric_max_cc.svg' % self.path, key='<tspan style="text-decoration:overline">CC</tspan>',
+                  color=self.color_from_float(value, min_value=10, max_value=35, invert=True),
+                  value=self.prettify(value))
+
+    def color_from_float(self, value:float, min_value=0.0, max_value=1.0, invert=False):
         """
         Convert a float into a color.
 
         :param value: Float.
         :param min_value: Minimum value considered as failing.
         :param max_value: Maximum value considered as success.
+        :param invert: Set a success as a maximum value instead of the opposite.
         :return: Hexadecimal color.
         """
+        if invert:
+            max_color, min_color = self.failure_color, self.success_color
+        else:
+            max_color, min_color = self.success_color, self.failure_color
 
         if value is None:
-            return self.failure_color
+            return min_color
         elif value <= min_value:
-            return self.failure_color
+            return min_color
         elif value >= max_value:
-            return self.success_color
+            return max_color
         else:
             r = value / (max_value - min_value) # Success rate in [0,1]
 
             def hex_to_rgb(hex):
                 return tuple(int(hex[i:i + 2], 16) for i in (0, 2, 4))
 
-            min_color = hex_to_rgb(self.failure_color[1:])
-            max_color = hex_to_rgb(self.success_color[1:])
-            rgb_color = tuple(map(lambda x, y: round((1.0 - r) * x + r * y), min_color, max_color))
+            min_color_values = hex_to_rgb(min_color[1:])
+            max_color_values = hex_to_rgb(max_color[1:])
+            rgb_color = tuple(map(lambda x, y: round((1.0 - r) * x + r * y), min_color_values, max_color_values))
             return '#%02x%02x%02x' % rgb_color
 
     @staticmethod
