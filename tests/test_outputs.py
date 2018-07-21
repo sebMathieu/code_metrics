@@ -24,7 +24,8 @@ class TestOutputs(unittest.TestCase):
             metrics_results.MAINTAINABILITY_INDEX: 0.82,
             metrics_results.AVERAGE_CYCLOMATIC_COMPLEXITY: 3.5,
             metrics_results.MAX_CYCLOMATIC_COMPLEXITY: 9,
-            metrics_results.MAX_CYCLOMATIC_COMPLEXITY_FUNCTION: "..."
+            metrics_results.MAX_CYCLOMATIC_COMPLEXITY_FUNCTION: "...",
+            metrics_results.CODE_STYLE: 0.8
         }
 
         # Mock

@@ -5,7 +5,7 @@ import os
 from jinja2 import Template
 
 from .abstract_output import AbstractOutput
-from metrics.results import LINES_OF_CODE, COMMENT_RATE, TESTS_COVERAGE, REPORT_DATE, MAINTAINABILITY_INDEX, MAX_CYCLOMATIC_COMPLEXITY
+import metrics.results as metrics_results
 
 class SVG(AbstractOutput):
     """
@@ -36,34 +36,39 @@ class SVG(AbstractOutput):
         os.makedirs(self.path, exist_ok=True)
 
         # Output date
-        value = results[REPORT_DATE]
+        value = results[metrics_results.REPORT_DATE]
         self.icon("%s/metric_date.svg" % self.path, key="Date", value=value.strftime('%m/%d'),
                   color=self.neutral_color)
 
         # Output lines of code
-        value = results[LINES_OF_CODE]
+        value = results[metrics_results.LINES_OF_CODE]
         self.icon("%s/metric_lines.svg" % self.path, key="Lines", value=value,
                   color=self.neutral_color if value > 0 else self.failure_color)
 
         # Output documentation rate
-        value = results[COMMENT_RATE]
+        value = results[metrics_results.COMMENT_RATE]
         self.icon('%s/metric_comments.svg' % self.path, key="/* */", value=self.prettify(value),
                   color=self.color_from_float(value, max_value=0.45))
 
         # Output test coverage
-        value = results[TESTS_COVERAGE]
+        value = results[metrics_results.TESTS_COVERAGE]
         self.icon('%s/metric_tests.svg' % self.path, key="Tests", value=self.prettify(value),
                   color=self.color_from_float(value, min_value=0.2))
 
         # Output maintainability index
-        value = results[MAINTAINABILITY_INDEX]
+        value = results[metrics_results.MAINTAINABILITY_INDEX]
         self.icon('%s/metric_maintainability_index.svg' % self.path, key="MI", value=self.prettify(value),
                   color=self.color_from_float(value, min_value=0.2, max_value=0.9))
 
         # Output cyclomatic complexity
-        value = results[MAX_CYCLOMATIC_COMPLEXITY]
+        value = results[metrics_results.MAX_CYCLOMATIC_COMPLEXITY]
         self.icon('%s/metric_max_cc.svg' % self.path, key='<tspan style="text-decoration:overline">CC</tspan>',
                   color=self.color_from_float(value, min_value=10, max_value=35, invert=True),
+                  value=self.prettify(value))
+
+        # Output code style
+        value = results[metrics_results.CODE_STYLE]
+        self.icon('%s/metric_code_style.svg' % self.path, key='PEP8', color=self.color_from_float(value),
                   value=self.prettify(value))
 
     def color_from_float(self, value:float, min_value=0.0, max_value=1.0, invert=False):

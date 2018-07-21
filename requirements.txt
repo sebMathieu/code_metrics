@@ -10,3 +10,5 @@ recommonmark
 deepmerge
 cairosvg
 nose
+pycodestyle
+

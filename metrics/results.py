@@ -12,7 +12,7 @@ MAINTAINABILITY_INDEX = 'Maintainability index'
 AVERAGE_CYCLOMATIC_COMPLEXITY = 'Cyclomatic complexity - average'
 MAX_CYCLOMATIC_COMPLEXITY = 'Cyclomatic complexity - maximum'
 MAX_CYCLOMATIC_COMPLEXITY_FUNCTION = 'Max cyclomatic complexity function'
-
+CODE_STYLE = 'Code style'
 
 def initialize_results(code_path=".", date=datetime.datetime.now()):
     """
