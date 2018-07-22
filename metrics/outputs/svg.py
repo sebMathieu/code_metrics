@@ -58,7 +58,7 @@ class SVG(AbstractOutput):
         # Output maintainability index
         value = results[metrics_results.MAINTAINABILITY_INDEX]
         self.icon('%s/metric_maintainability_index.svg' % self.path, key="MI", value=self.prettify(value),
-                  color=self.color_from_float(value, min_value=0.2, max_value=0.9))
+                  color=self.color_from_float(value, min_value=0.1, max_value=0.5))
 
         # Output cyclomatic complexity
         value = results[metrics_results.MAX_CYCLOMATIC_COMPLEXITY]
