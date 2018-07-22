@@ -4,7 +4,7 @@ from deepmerge import always_merger
 from radon.cli.harvest import RawHarvester, MIHarvester
 from radon.cli import Config
 
-from ..results import LINES_OF_CODE, COMMENT_RATE, MAINTAINABILITY_INDEX
+from metrics.report_keys import LINES_OF_CODE, COMMENT_RATE, MAINTAINABILITY_INDEX
 
 def raw(code_path, results):
     """

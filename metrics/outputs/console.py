@@ -1,7 +1,7 @@
 # -*- coding: UTF-8 -*-
 
 from .abstract_output import AbstractOutput
-from metrics.results import CODE_PATH, REPORT_DATE
+from metrics.report_keys import CODE_PATH, REPORT_DATE
 
 class Console(AbstractOutput):
     """

@@ -2,4 +2,4 @@
 Compute Python code metrics.
 """
 
-from .metrics import compute_metrics
+from .measures import compute_metrics

@@ -3,8 +3,8 @@
 import unittest
 import os
 
-from metrics.metrics import raw, cyclomatic_complexity, code_style
-import metrics.results as metric_results
+from metrics.measures import raw, cyclomatic_complexity, code_style
+import metrics.report_keys as report_keys
 
 TEST_CODE_PATH = "metrics"
 
@@ -16,19 +16,19 @@ class TestMetrics(unittest.TestCase):
         r = {}
         raw(TEST_CODE_PATH, r)
 
-        self.assertIn(metric_results.LINES_OF_CODE, r)
-        self.assertIn(metric_results.COMMENT_RATE, r)
+        self.assertIn(report_keys.LINES_OF_CODE, r)
+        self.assertIn(report_keys.COMMENT_RATE, r)
 
-        self.assertGreater(r[metric_results.MAINTAINABILITY_INDEX], 0.0)
-        self.assertLessEqual(r[metric_results.MAINTAINABILITY_INDEX], 1.0)  # Equal because, perfection is reachable, sometimes  ...
+        self.assertGreater(r[report_keys.MAINTAINABILITY_INDEX], 0.0)
+        self.assertLessEqual(r[report_keys.MAINTAINABILITY_INDEX], 1.0)  # Equal because, perfection is reachable, sometimes  ...
 
     def test_cyclomatic_complexity(self):
         r = {}
         cyclomatic_complexity(TEST_CODE_PATH, r)
 
-        self.assertLess(r[metric_results.MAX_CYCLOMATIC_COMPLEXITY], 30)
-        self.assertLess(r[metric_results.AVERAGE_CYCLOMATIC_COMPLEXITY], 20)
-        self.assertIsNotNone(r[metric_results.MAX_CYCLOMATIC_COMPLEXITY_FUNCTION])
+        self.assertLess(r[report_keys.MAX_CYCLOMATIC_COMPLEXITY], 30)
+        self.assertLess(r[report_keys.AVERAGE_CYCLOMATIC_COMPLEXITY], 20)
+        self.assertIsNotNone(r[report_keys.MAX_CYCLOMATIC_COMPLEXITY_FUNCTION])
 
     def test_code_style(self):
         r = {}

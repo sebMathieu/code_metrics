@@ -2,7 +2,7 @@
 
 import pycodestyle
 
-from ..results import CODE_STYLE
+from metrics.report_keys import CODE_STYLE
 
 def code_style(code_path, results, ignore_codes=None):
     """

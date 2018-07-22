@@ -4,7 +4,8 @@ from radon.cli.harvest import CCHarvester
 from radon.complexity import SCORE
 from radon.cli import Config
 
-from ..results import MAX_CYCLOMATIC_COMPLEXITY, MAX_CYCLOMATIC_COMPLEXITY_FUNCTION, AVERAGE_CYCLOMATIC_COMPLEXITY
+from metrics.report_keys import MAX_CYCLOMATIC_COMPLEXITY, MAX_CYCLOMATIC_COMPLEXITY_FUNCTION, \
+    AVERAGE_CYCLOMATIC_COMPLEXITY
 
 def cyclomatic_complexity(code_path, results):
     """

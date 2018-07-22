@@ -13,6 +13,6 @@
     </g>
     <g fill="#fff" text-anchor="middle" font-family="DejaVu Sans,Verdana,Geneva,sans-serif" font-size="110">
         <text x="190" y="135" transform="scale(.1)">{{ key }}</text>
-        <text x="570" y="135" transform="scale(.1)">{{ value }}</text>
+        <text x="575" y="135" transform="scale(.1)">{{ value }}</text>
     </g>
 </svg>

@@ -6,7 +6,7 @@ import os
 import sys
 from io import StringIO
 
-from ..results import TESTS_COVERAGE
+from metrics.report_keys import TESTS_COVERAGE
 
 COVERAGE_FILE = '.coverage'  # Path to the coverage file
 

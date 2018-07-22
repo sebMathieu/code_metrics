@@ -1,9 +1,9 @@
-<img src="doc/metrics/metric_tests.png" height=20> &nbsp;
-<img src="doc/metrics/metric_max_cc.png" height=20> &nbsp;
+<img src="doc/metrics/metric_tests_coverage.png" height=20> &nbsp;
+<img src="doc/metrics/metric_cyclomatic_complexity_maximum.png" height=20> &nbsp;
 <img src="doc/metrics/metric_maintainability_index.png" height=20> &nbsp;
-<img src="doc/metrics/metric_comments.png" height=20> &nbsp;
+<img src="doc/metrics/metric_documentation_rate.png" height=20> &nbsp;
 <img src="doc/metrics/metric_code_style.png" height=20> &nbsp;
-<img src="doc/metrics/metric_lines.png" height=20> &nbsp;
+<img src="doc/metrics/metric_lines_of_code.png" height=20> &nbsp;
 
 This package aims to provide hints on the quality of a python code.
 It extracts metrics from various code quality reporting tools.

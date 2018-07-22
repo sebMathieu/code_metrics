@@ -2,7 +2,7 @@
 
 import datetime
 
-from ..results import CODE_PATH, REPORT_DATE
+from metrics.report_keys import CODE_PATH, REPORT_DATE
 from .raw import raw
 from .cyclomatic_complexity import cyclomatic_complexity
 from .tests_coverage import tests_coverage

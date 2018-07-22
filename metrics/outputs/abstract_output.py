@@ -57,7 +57,7 @@ class AbstractOutput(ABC):
             if 0.025 <= value <= 1.0:
                 return "%.0f%%" % (value * 100.0)
             else:
-                return "%g" % value
+                return "%.1f" % value
         elif isinstance(value, datetime.datetime):
             return value.strftime(self.datetime_format)
         elif isinstance(value, str) and os.path.exists(value):

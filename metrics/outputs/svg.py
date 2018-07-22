@@ -1,11 +1,12 @@
 # -*- coding: UTF-8 -*-
 
 import os
+import datetime
 
 from jinja2 import Template
 
 from .abstract_output import AbstractOutput
-import metrics.results as metrics_results
+import metrics.report_keys as report_keys
 
 class SVG(AbstractOutput):
     """
@@ -36,40 +37,25 @@ class SVG(AbstractOutput):
         os.makedirs(self.path, exist_ok=True)
 
         # Output date
-        value = results[metrics_results.REPORT_DATE]
-        self.icon("%s/metric_date.svg" % self.path, key="Date", value=value.strftime('%m/%d'),
-                  color=self.neutral_color)
+        for key in report_keys.__dict__.values():
+            # Only keep report keys that can be rendered
+            if not isinstance(key, report_keys.ReportKeys) or key.python_type == str or key.abbreviation is None:
+                continue
 
-        # Output lines of code
-        value = results[metrics_results.LINES_OF_CODE]
-        self.icon("%s/metric_lines.svg" % self.path, key="Lines", value=value,
-                  color=self.neutral_color if value > 0 else self.failure_color)
+            # Prepare value
+            value = results[key]
+            if isinstance(value, datetime.datetime):
+                value = value.strftime('%m/%d')
 
-        # Output documentation rate
-        value = results[metrics_results.COMMENT_RATE]
-        self.icon('%s/metric_comments.svg' % self.path, key="/* */", value=self.prettify(value),
-                  color=self.color_from_float(value, max_value=0.45))
+            # Obtain color
+            if key.ub is None:
+                color = self.neutral_color
+            else:
+                color = self.color_from_float(value, max_value=key.ub, min_value=key.lb, invert=not key.more_is_better)
 
-        # Output test coverage
-        value = results[metrics_results.TESTS_COVERAGE]
-        self.icon('%s/metric_tests.svg' % self.path, key="Tests", value=self.prettify(value),
-                  color=self.color_from_float(value, min_value=0.2))
-
-        # Output maintainability index
-        value = results[metrics_results.MAINTAINABILITY_INDEX]
-        self.icon('%s/metric_maintainability_index.svg' % self.path, key="MI", value=self.prettify(value),
-                  color=self.color_from_float(value, min_value=0.1, max_value=0.5))
-
-        # Output cyclomatic complexity
-        value = results[metrics_results.MAX_CYCLOMATIC_COMPLEXITY]
-        self.icon('%s/metric_max_cc.svg' % self.path, key='<tspan style="text-decoration:overline">CC</tspan>',
-                  color=self.color_from_float(value, min_value=10, max_value=35, invert=True),
-                  value=self.prettify(value))
-
-        # Output code style
-        value = results[metrics_results.CODE_STYLE]
-        self.icon('%s/metric_code_style.svg' % self.path, key='PEP8', color=self.color_from_float(value),
-                  value=self.prettify(value))
+            # Create icon
+            self.icon("%s/metric_%s.svg" % (self.path, key.to_file_name()),
+                      key=key.abbreviate(), value=self.prettify(value), color=color)
 
     def color_from_float(self, value:float, min_value=0.0, max_value=1.0, invert=False):
         """

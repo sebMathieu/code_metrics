@@ -19,7 +19,7 @@ import sys
 
 from docopt import docopt
 
-from .metrics import compute_metrics
+from .measures import compute_metrics
 from .outputs import Console, RST, JSON, SVG, PNG
 
 if __name__ == "__main__":
