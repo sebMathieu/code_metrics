@@ -15,6 +15,7 @@ setup(
                       'coverage',
                       'rst',
                       'jinja2',
-                      'deepmerge'],
+                      'deepmerge',
+                      'cairosvg'],
     zip_safe=False
 )
