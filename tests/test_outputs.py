@@ -8,7 +8,7 @@ import io
 from unittest.mock import patch, mock_open, MagicMock
 
 from metrics.outputs import JSON, RST, Console, SVG, PNG
-import metrics.results as metrics_results
+import metrics.report_keys as report_keys
 
 class TestOutputs(unittest.TestCase):
     def setUp(self):
@@ -16,16 +16,16 @@ class TestOutputs(unittest.TestCase):
 
         # Data
         self.results = {
-            metrics_results.CODE_PATH: "metrics",
-            metrics_results.REPORT_DATE: datetime.datetime(2018, 6, 24, 1, 2, 3),
-            metrics_results.LINES_OF_CODE: 127,
-            metrics_results.COMMENT_RATE: 0.32,
-            metrics_results.TESTS_COVERAGE: None,
-            metrics_results.MAINTAINABILITY_INDEX: 0.82,
-            metrics_results.AVERAGE_CYCLOMATIC_COMPLEXITY: 3.5,
-            metrics_results.MAX_CYCLOMATIC_COMPLEXITY: 9,
-            metrics_results.MAX_CYCLOMATIC_COMPLEXITY_FUNCTION: "...",
-            metrics_results.CODE_STYLE: 0.8
+            report_keys.CODE_PATH: "metrics",
+            report_keys.REPORT_DATE: datetime.datetime(2018, 6, 24, 1, 2, 3),
+            report_keys.LINES_OF_CODE: 127,
+            report_keys.COMMENT_RATE: 0.32,
+            report_keys.TESTS_COVERAGE: None,
+            report_keys.MAINTAINABILITY_INDEX: 0.82,
+            report_keys.AVERAGE_CYCLOMATIC_COMPLEXITY: 3.5,
+            report_keys.MAX_CYCLOMATIC_COMPLEXITY: 9,
+            report_keys.MAX_CYCLOMATIC_COMPLEXITY_FUNCTION: "...",
+            report_keys.CODE_STYLE: 0.8
         }
 
         # Mock
@@ -46,7 +46,7 @@ class TestOutputs(unittest.TestCase):
             out.output(self.results)
         m.assert_called_once_with('test.json', 'w')
         handle = m()
-        handle.write.assert_any_call('"%s"' % metrics_results.TESTS_COVERAGE)
+        handle.write.assert_any_call('"%s"' % report_keys.TESTS_COVERAGE)
 
     def test_rst(self):
         out = RST("test.rst")
@@ -62,8 +62,8 @@ class TestOutputs(unittest.TestCase):
         # Fetch output
         sys.stdout.seek(0)
         report = sys.stdout.read()
-        self.assertGreaterEqual(report.find("%s: 32%%" % metrics_results.COMMENT_RATE), 0)
-        self.assertGreaterEqual(report.find("%s: Failed" % metrics_results.TESTS_COVERAGE), 0)
+        self.assertGreaterEqual(report.find("%s: 32%%" % report_keys.COMMENT_RATE), 0)
+        self.assertGreaterEqual(report.find("%s: Failed" % report_keys.TESTS_COVERAGE), 0)
 
     def test_svg(self):
         output_path = os.path.dirname(__file__)

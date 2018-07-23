@@ -13,4 +13,4 @@ class JSON(AbstractOutput):
     def output(self, results):
         os.makedirs(os.path.dirname(self.path), exist_ok=True)
         with open('%s' % self.path, 'w') as file:
-            json.dump({k: self.dump(v) for k, v in results.items()}, file, indent=4)
+            json.dump({str(k): self.dump(v) for k, v in results.items()}, file, indent=4)

@@ -1,9 +1,9 @@
-<img src="doc/metrics/metric_tests.png" height=20> &nbsp;
-<img src="doc/metrics/metric_max_cc.png" height=20> &nbsp;
+<img src="doc/metrics/metric_tests_coverage.png" height=20> &nbsp;
+<img src="doc/metrics/metric_cyclomatic_complexity_maximum.png" height=20> &nbsp;
 <img src="doc/metrics/metric_maintainability_index.png" height=20> &nbsp;
-<img src="doc/metrics/metric_comments.png" height=20> &nbsp;
+<img src="doc/metrics/metric_documentation_rate.png" height=20> &nbsp;
 <img src="doc/metrics/metric_code_style.png" height=20> &nbsp;
-<img src="doc/metrics/metric_lines.png" height=20> &nbsp;
+<img src="doc/metrics/metric_lines_of_code.png" height=20> &nbsp;
 
 This package aims to provide hints on the quality of a python code.
 It extracts metrics from various code quality reporting tools.
@@ -34,23 +34,23 @@ The icon on the top of this document are generated in the sub-folder
 ## Metrics
 
 The metrics computed by this package are provided by
-    - [unit tests](https://docs.python.org/3/library/unittest.html),
-    - [radon](http://radon.readthedocs.io/en/latest/intro.html)
-    - [pycodestyle](http://pycodestyle.pycqa.org/en/latest/intro.html)
+- [unit tests](https://docs.python.org/3/library/unittest.html),
+- [radon](http://radon.readthedocs.io/en/latest/intro.html)
+- [pycodestyle](http://pycodestyle.pycqa.org/en/latest/intro.html)
+
 Deeper explanation of the metrics can be obtained by reading their
 corresponding documentation.
-
 In a nutshell, here is a succinct description of the metrics:
 
-| Name | Type | Description |
-| --- | --- | --- |
-| Code style | float | One minus the number of PEP8 error violations divided by the number of lines.|
-| Cyclomatic complexity - average | float | Average cyclomatic complexity |
-| Cyclomatic complexity - maximum | integer | Maximum cyclomatic complexity |
-| Code path | string | Path of the evaluated code |
-| Report date | date | Metrics report production date |
-| Documentation rate | \[0,1\] | Documentation rate wrt. total number of lines |
-| Lines of code | positive integer | Number of logical lines of code |
-| Maintainability index |\[0,1\] | Maintainability index computed by Radon |
-| Max cyclomatic complexity function | string | Reference to the function with the maximum cyclomatic complexity |
-| Tests coverage | \[0,1\] | Coverage rate of the unit tests |
+| Name | Type | Description | Further references |
+| --- | --- | --- | --- |
+| Code style | float | One minus the number of PEP8 error violations divided by the number of lines.| |
+| Cyclomatic complexity - average | float | Average cyclomatic complexity | |
+| Cyclomatic complexity - maximum | integer | Maximum cyclomatic complexity | |
+| Code path | string | Path of the evaluated code | |
+| Report date | date | Metrics report production date | |
+| Documentation rate | \[0,1\] | Documentation rate wrt. total number of lines | |
+| Lines of code | positive integer | Number of logical lines of code | |
+| Maintainability index |\[0,1\] | Maintainability index computed by Radon | [\[*\]](https://avandeursen.com/2014/08/29/think-twice-before-using-the-maintainability-index/) |
+| Max cyclomatic complexity function | string | Reference to the function with the maximum cyclomatic complexity | |
+| Tests coverage | \[0,1\] | Coverage rate of the unit tests | |

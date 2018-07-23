@@ -27,17 +27,26 @@ class PNG(SVG):
         self.keep_svg = keep_svg
         self.scale = scale
 
-    def output(self, results):
+    def list_svg(self, file_suffix=".svg"):
+        """
+        Get all the files with a given suffix.
+
+        :param file_suffix: Suffix of the files.
+        :return: Set of file names in path
+        """
         try:
-            initial_svgs = {f for f  in os.listdir(self.path) if f.endswith(".svg")}
+            return  {f for f in os.listdir(self.path) if f.endswith(file_suffix)}
         except FileNotFoundError:
-            initial_svgs = {}
+            return {}
+
+    def output(self, results):
+        initial_svgs = self.list_svg()
 
         # Create SVGs
         super().output(results)
 
         # Convert new svgs into png
-        all_svgs = {f for f in os.listdir(self.path) if f.endswith(".svg")}
+        all_svgs = self.list_svg()
         for name in all_svgs:
             new_name = name[:-3] + "png"
             cairosvg.svg2png(url="%s/%s" % (self.path, name), write_to="%s/%s" % (self.path, new_name),
