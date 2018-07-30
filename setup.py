@@ -16,6 +16,7 @@ setup(
                       'rst',
                       'jinja2',
                       'deepmerge',
-                      'cairosvg'],
+                      'cairosvg',
+                      'pycodestyle'],
     zip_safe=False
 )

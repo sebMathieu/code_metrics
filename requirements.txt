@@ -11,4 +11,3 @@ deepmerge
 cairosvg
 nose
 pycodestyle
-
