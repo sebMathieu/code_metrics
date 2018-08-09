@@ -41,5 +41,5 @@ def raw(code_path, results):
 
     # Export results
     results[LINES_OF_CODE] = summary.get('lloc', 0)
-    results[COMMENT_RATE] = (float(summary.get('comments', 0)) + float(summary.get('multi', 0))) / (float(summary.get('loc', 1)))
+    results[COMMENT_RATE] = (float(summary.get('comments', 0)) + float(summary.get('multi', 0))) / (max(1, float(summary.get('loc', 1))))
     results[MAINTAINABILITY_INDEX] = summary.get('mi', 0.0) / 100.0

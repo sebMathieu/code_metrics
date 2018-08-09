@@ -20,4 +20,4 @@ def code_style(code_path, results, ignore_codes=None):
     report = style_guide.check_files([code_path])
 
     # Summarize metrics
-    results[CODE_STYLE] = 1.0 - max(min(report.total_errors / report.counters['physical lines'], 1.0), 0.0)
+    results[CODE_STYLE] = 1.0 - max(min(report.total_errors / max(1.0, report.counters['physical lines']), 1.0), 0.0)
